@@ -1,0 +1,6 @@
+@CapstoneGenerator.API_HostAddress = http://localhost:5147
+
+GET {{CapstoneGenerator.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
