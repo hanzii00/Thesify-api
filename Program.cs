@@ -2,6 +2,8 @@ using CapstoneGenerator.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ─── Services ────────────────────────────────────────────────────────────────
+
 builder.Services.AddControllers();
 builder.Services.AddHttpClient<GroqService>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
@@ -9,6 +11,12 @@ builder.Services.AddHttpClient<GroqService>()
         ServerCertificateCustomValidationCallback =
             HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
     });
+
+// Health checks
+builder.Services.AddHealthChecks();
+
+// Self-ping background service (keeps Render free instance alive)
+builder.Services.AddHostedService<KeepAliveService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -29,6 +37,8 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader());
 });
 
+// ─── App ─────────────────────────────────────────────────────────────────────
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -40,6 +50,9 @@ app.UseSwaggerUI(c =>
 
 app.UseCors("AllowAll");
 app.UseAuthorization();
+
+app.MapHealthChecks("/health");
+
 app.MapControllers();
 
 app.Run();
