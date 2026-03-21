@@ -6,22 +6,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-var httpClientHandler = new HttpClientHandler
-{
-    ServerCertificateCustomValidationCallback =
-        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-};
-
 builder.Services.AddHttpClient<GroqService>()
-    .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler);
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    });
 
 builder.Services.AddHttpClient<ResearchPaperService>()
-    .ConfigurePrimaryHttpMessageHandler(() => httpClientHandler);
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    });
 
 // Health checks
 builder.Services.AddHealthChecks();
 
-// Self-ping background service (keeps Render free instance alive)
+// Keep-alive background service
 builder.Services.AddHttpClient();
 builder.Services.AddHostedService<KeepAliveService>();
 
