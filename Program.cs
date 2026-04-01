@@ -36,6 +36,9 @@ builder.Services.AddHealthChecks();
 builder.Services.AddHttpClient();
 builder.Services.AddHostedService<KeepAliveService>();
 
+// Health check background service
+builder.Services.AddHostedService<HealthCheckService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
