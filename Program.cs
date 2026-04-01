@@ -1,4 +1,6 @@
 using CapstoneGenerator.API.Services;
+using CapstoneGenerator.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Analytics Service (In-Memory)
-builder.Services.AddSingleton<AnalyticsService>();
+// Database and Analytics (Supabase PostgreSQL)
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING") 
+    ?? builder.Configuration.GetConnectionString("Supabase");
+builder.Services.AddDbContext<AnalyticsDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddScoped<AnalyticsService>();
 
 builder.Services.AddHttpClient<GroqService>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
@@ -52,6 +58,13 @@ builder.Services.AddCors(options =>
 // ─── App ─────────────────────────────────────────────────────────────────────
 
 var app = builder.Build();
+
+// Initialize database
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AnalyticsDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
