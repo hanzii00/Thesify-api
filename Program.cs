@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Database and Analytics (Supabase PostgreSQL)
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING") 
+var connectionString = Environment.GetEnvironmentVariable("Supabase") 
     ?? builder.Configuration.GetConnectionString("Supabase");
 builder.Services.AddDbContext<AnalyticsDbContext>(options =>
     options.UseNpgsql(connectionString));
