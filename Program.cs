@@ -1,6 +1,4 @@
 using CapstoneGenerator.API.Services;
-using CapstoneGenerator.API.Data;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,10 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Database and Analytics
-builder.Services.AddDbContext<AnalyticsDbContext>(options =>
-    options.UseSqlite("Data Source=capstone_analytics.db"));
-builder.Services.AddScoped<AnalyticsService>();
+// Analytics Service (In-Memory)
+builder.Services.AddSingleton<AnalyticsService>();
 
 builder.Services.AddHttpClient<GroqService>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
@@ -56,13 +52,6 @@ builder.Services.AddCors(options =>
 // ─── App ─────────────────────────────────────────────────────────────────────
 
 var app = builder.Build();
-
-// Initialize database
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AnalyticsDbContext>();
-    dbContext.Database.EnsureCreated();
-}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
