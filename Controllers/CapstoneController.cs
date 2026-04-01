@@ -9,11 +9,13 @@ namespace CapstoneGenerator.API.Controllers;
 public class CapstoneController : ControllerBase
 {
     private readonly GroqService _groqService;
+    private readonly AnalyticsService _analyticsService;
     private readonly ILogger<CapstoneController> _logger;
 
-    public CapstoneController(GroqService groqService, ILogger<CapstoneController> logger)
+    public CapstoneController(GroqService groqService, AnalyticsService analyticsService, ILogger<CapstoneController> logger)
     {
         _groqService = groqService;
+        _analyticsService = analyticsService;
         _logger = logger;
     }
 
@@ -35,16 +37,28 @@ public class CapstoneController : ControllerBase
         try
         {
             var result = await _groqService.GenerateAsync(request);
+            
+            // Log successful generation
+            await _analyticsService.LogGenerationAsync(request.Course, request.Difficulty, success: true);
+            
             return Ok(result);
         }
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, "Groq API request failed.");
+            
+            // Log failed generation
+            await _analyticsService.LogGenerationAsync(request.Course, request.Difficulty, success: false);
+            
             return StatusCode(502, new { error = "Failed to reach Groq API.", detail = ex.Message });
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unexpected error during capstone generation.");
+            
+            // Log failed generation
+            await _analyticsService.LogGenerationAsync(request.Course, request.Difficulty, success: false);
+            
             return StatusCode(500, new { error = "An unexpected error occurred.", detail = ex.Message });
         }
     }
