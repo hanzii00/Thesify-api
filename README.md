@@ -1,10 +1,10 @@
-# 🎓 Capstone Generator API
+#  Capstone Generator API
 
 An AI-powered REST API that generates capstone project ideas for students using **Groq AI (Llama 3.3)** and **ASP.NET Core**.
 
 ---
 
-## 🧱 Tech Stack
+##  Tech Stack
 
 - **ASP.NET Core 9** — Web API framework
 - **Groq API** — Free AI inference (Llama 3.3 70B)
@@ -13,7 +13,7 @@ An AI-powered REST API that generates capstone project ideas for students using 
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 CapstoneGenerator.API/
@@ -34,7 +34,7 @@ CapstoneGenerator.API/
 
 ---
 
-## ⚙️ Setup & Installation
+##  Setup & Installation
 
 ### 1. Prerequisites
 - [.NET 9 SDK](https://dotnet.microsoft.com/download)
@@ -63,7 +63,7 @@ Create `appsettings.Development.json` in the project root:
 }
 ```
 
-> ⚠️ This file is in `.gitignore` — your key will never be committed.
+>  This file is in `.gitignore` — your key will never be committed.
 
 ### 4. Restore dependencies
 ```bash
@@ -136,7 +136,7 @@ Generates a capstone project idea based on student input.
 
 ---
 
-## 🧪 Testing with Postman
+##  Testing with Postman
 
 1. Set method to **POST**
 2. URL: `http://localhost:5147/api/capstone/generate`
@@ -146,7 +146,7 @@ Generates a capstone project idea based on student input.
 
 ---
 
-## 🔒 Security Notes
+## Security Notes
 
 - Never commit `appsettings.Development.json`
 - Add the following to `.gitignore`:
@@ -158,7 +158,7 @@ obj/
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 POST /api/capstone/generate
@@ -176,6 +176,6 @@ JSON parsed into CapstoneResponse
 
 ---
 
-## 📄 License
+## License
 
-MIT License — free to use for academic and personal projects.
+This project is currently unlicensed. All rights reserved by the author.
