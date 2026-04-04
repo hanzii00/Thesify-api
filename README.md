@@ -1,4 +1,4 @@
-#  Capstone Generator API
+#  Thesify API
 
 An AI-powered REST API that generates capstone project ideas for students using **Groq AI (Llama 3.3)** and **ASP.NET Core**.
 
